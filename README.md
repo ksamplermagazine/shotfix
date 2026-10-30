@@ -6,7 +6,9 @@ An open-source camera-guided reshoot prototype for AI images and video, built wi
 
 ## Demo
 
-[Watch the Shotfix demo on YouTube](https://youtu.be/5S30jUFKirw)
+[![Watch the Shotfix demo](https://img.youtube.com/vi/5S30jUFKirw/maxresdefault.jpg)](https://youtu.be/5S30jUFKirw)
+
+[▶ Watch the demo on YouTube](https://youtu.be/5S30jUFKirw)
 
 ## How it works
 
