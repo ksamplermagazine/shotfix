@@ -4,6 +4,10 @@
 
 An open-source camera-guided reshoot prototype for AI images and video, built with a browser 3D editor and ComfyUI workflows.
 
+## Demo
+
+[Watch the Shotfix demo on YouTube](https://youtu.be/5S30jUFKirw)
+
 ## How it works
 
 1. Upload a source image/video and optional character sheet. The browser extracts a video reference frame.
@@ -67,7 +71,7 @@ Tests cover media-role wiring, take associations, camera interpolation/restorati
 
 ## Demo and contest
 
-Final demo/social links are pending; add them before submitting. See [docs/SUBMISSION.md](docs/SUBMISSION.md). The older hosted camera demo is not evidence of the latest workshop generation flow.
+Demo video: [Watch on YouTube](https://youtu.be/5S30jUFKirw). Social submission link is pending. See [docs/SUBMISSION.md](docs/SUBMISSION.md). The older hosted camera demo is not evidence of the latest workshop generation flow.
 
 Built for the Comfy-organized **#OpenSourceHiggsfield** challenge. No Higgsfield affiliation, endorsement or award is claimed.
 
