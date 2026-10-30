@@ -1,0 +1,76 @@
+{
+  "take": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "selected-take.png"
+    },
+    "_meta": {
+      "title": "Approved preview"
+    }
+  },
+  "ref0": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "character-sheet.png"
+    },
+    "_meta": {
+      "title": "Character sheet"
+    }
+  },
+  "guide": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "guide-video.mp4"
+    },
+    "_meta": {
+      "title": "3D camera and pose motion"
+    }
+  },
+  "generate": {
+    "class_type": "ByteDance2ReferenceNodeV2",
+    "inputs": {
+      "model": "Seedance 2.5",
+      "model.prompt": "Translate video_1 into one continuous photorealistic 4-second shot. Video_1 is the frame-by-frame camera, composition, pose and motion blueprint: preserve its trajectory, field of view, parallax, framing, occlusion and motion timing. Image_1 supplies the approved scene appearance, materials and lighting; do not keep its camera static. Image_2 is a character sheet of one person and controls identity, hairstyle, wardrobe and proportions. Replace clay and mannequin surfaces with realistic appearances. Do not invent extra movement, cuts or transitions. Preserve natural hands and object contact. No viewport graphics or text.\n",
+      "model.resolution": "1080p",
+      "model.ratio": "16:9",
+      "model.duration": 4,
+      "model.generate_audio": false,
+      "model.task_type": "reference",
+      "model.output_format": "mp4",
+      "model.auto_downscale": false,
+      "model.auto_upscale": false,
+      "model.reference_images.image_1": [
+        "take",
+        0
+      ],
+      "seed": 0,
+      "watermark": false,
+      "model.reference_images.image_2": [
+        "ref0",
+        0
+      ],
+      "model.reference_videos.video_1": [
+        "guide",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Generate guided video"
+    }
+  },
+  "save": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "generate",
+        0
+      ],
+      "filename_prefix": "shotfix/shot",
+      "format": "mp4",
+      "codec": "auto"
+    },
+    "_meta": {
+      "title": "Save final video"
+    }
+  }
+}

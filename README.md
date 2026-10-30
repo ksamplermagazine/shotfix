@@ -74,4 +74,3 @@ Built for the Comfy-organized **#OpenSourceHiggsfield** challenge. No Higgsfield
 ## License
 
 App code: [Apache-2.0](LICENSE). Dependencies/models retain their own terms. See [THIRD_PARTY.md](THIRD_PARTY.md). This license grants no rights to customer references, Mixamo assets or model weights.
-

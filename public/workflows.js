@@ -1,0 +1,22 @@
+import {imagePrompt,painterVideoPrompt} from './tested-prompts.js';
+const node=(class_type,inputs,title)=>({class_type,inputs,_meta:{title}});
+export function buildImage({source='source.png',guide='guide.png',references=[],camera={},note='',id='shot'}){
+ const g={source:node('LoadImage',{image:source},'Source first frame'),guide:node('LoadImage',{image:guide},'Edited 3D camera view')};
+ const refs=references.slice(0,12);refs.forEach((r,i)=>g['ref'+i]=node('LoadImage',{image:r},i===0?'Character sheet':'Additional reference'));
+ const prompt=refs.length?imagePrompt:imagePrompt.replaceAll('Image 3','Image 2').replace(/IMAGE 2 — CHARACTER APPEARANCE[\s\S]*?IMAGE 3 — LOCKED SPATIAL STRUCTURE/,'IMAGE 2 — LOCKED SPATIAL STRUCTURE').replace('Images 1 and 2','Image 1');
+ const inputs={prompt:prompt+`\nCamera metadata: ${camera.focal||35} mm full-frame equivalent, azimuth ${camera.az||0} degrees, elevation ${camera.el||0} degrees. The guide image projection has priority over descriptive wording. ${String(note).slice(0,1000)}`,model:'Gemini Nano Banana 2.1','model.aspect_ratio':'16:9','model.resolution':'1K','model.thinking_level':'HIGH',seed:42,response_modalities:'IMAGE',temperature:1,top_p:.95,'model.images.image_1':['source',0]};
+ if(refs.length){inputs['model.images.image_2']=['ref0',0];inputs['model.images.image_3']=['guide',0];refs.slice(1).forEach((_,i)=>inputs['model.images.image_'+(i+4)]=['ref'+(i+1),0]);}else inputs['model.images.image_2']=['guide',0];
+ g.generate=node('GeminiNanoBanana2V2',inputs,'Generate camera-matched preview');g.save=node('SaveImage',{images:['generate',0],filename_prefix:'shotfix/'+id},'Save preview');return g;
+}
+export function buildVideo({image='selected-take.png',references=[],sourceVideo,guideVideo,seconds=4,note='',preset='',id='shot'}){
+ if(!Number.isInteger(seconds)||seconds<4||seconds>30)throw Error('Video duration must be a whole number from 4 to 30 seconds.');
+ const g={take:node('LoadImage',{image},'Approved preview')};
+ let prompt=preset==='painter-workshop'?painterVideoPrompt.replaceAll('4-second',seconds+'-second').replaceAll('exactly 4 seconds','exactly '+seconds+' seconds'):`Translate video_1 into one continuous photorealistic ${seconds}-second shot. Video_1 is the frame-by-frame camera, composition, pose and motion blueprint: preserve its trajectory, field of view, parallax, framing, occlusion and motion timing. Image_1 supplies the approved scene appearance, materials and lighting; do not keep its camera static. Image_2 is a character sheet of one person and controls identity, hairstyle, wardrobe and proportions. Replace clay and mannequin surfaces with realistic appearances. Do not invent extra movement, cuts or transitions. Preserve natural hands and object contact. No viewport graphics or text.`;
+ if(!references.length)prompt=prompt.replace(/Image_2 is a character sheet of one person and controls identity, hairstyle, wardrobe and proportions\./,'Preserve character identity from image_1.');
+ if(sourceVideo)prompt+=' Video_2 supplies additional source performance context; video_1 remains the camera and timing authority.';
+ const inputs={model:'Seedance 2.5','model.prompt':prompt+'\n'+String(note).slice(0,1000),'model.resolution':'1080p','model.ratio':'16:9','model.duration':seconds,'model.generate_audio':false,'model.task_type':'reference','model.output_format':'mp4','model.auto_downscale':false,'model.auto_upscale':false,'model.reference_images.image_1':['take',0],seed:0,watermark:false};
+ references.slice(0,6).forEach((r,i)=>{g['ref'+i]=node('LoadImage',{image:r},i===0?'Character sheet':'Additional reference');inputs['model.reference_images.image_'+(i+2)]=['ref'+i,0];});
+ let i=1;if(guideVideo){g.guide=node('LoadVideo',{file:guideVideo},'3D camera and pose motion');inputs['model.reference_videos.video_'+i++]=['guide',0];}if(sourceVideo){g.original=node('LoadVideo',{file:sourceVideo},'Original performance');inputs['model.reference_videos.video_'+i]=['original',0];}
+ g.generate=node('ByteDance2ReferenceNodeV2',inputs,'Generate guided video');g.save=node('SaveVideo',{video:['generate',0],filename_prefix:'shotfix/'+id,format:'mp4',codec:'auto'},'Save final video');return g;
+}
+export function validateGraph(g){for(const n of Object.values(g)){if(typeof n.class_type!=='string'||!n.inputs)throw Error('Invalid API graph.');for(const v of Object.values(n.inputs))if(Array.isArray(v)&&v.length===2&&typeof v[0]==='string'&&Number.isInteger(v[1])&&!g[v[0]])throw Error('Broken workflow connection.');}return g;}

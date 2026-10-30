@@ -1,0 +1,71 @@
+{
+  "source": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "source.png"
+    },
+    "_meta": {
+      "title": "Source first frame"
+    }
+  },
+  "guide": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "guide.png"
+    },
+    "_meta": {
+      "title": "Edited 3D camera view"
+    }
+  },
+  "ref0": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "character-sheet.png"
+    },
+    "_meta": {
+      "title": "Character sheet"
+    }
+  },
+  "generate": {
+    "class_type": "GeminiNanoBanana2V2",
+    "inputs": {
+      "prompt": "Transform Image 3 into a photorealistic finished frame. Treat Image 3 as the base image to reconstruct, not merely as inspiration.\n\nCAMERA AND FRAMING — HIGHEST PRIORITY\nKeep the camera projection and composition of Image 3 as closely as possible:\n- Preserve the camera position, height, viewing direction, upward or downward tilt, and roll.\n- Match its apparent field of view, perspective distortion, foreshortening, and foreground-to-background scale relationships.\n- Keep the subject, hands, chair, and major environmental objects at the same normalized screen positions and approximately the same projected sizes.\n- Preserve the same overlaps, occlusions, frame-edge intersections, and cropping.\n- If the body or an object is cropped in Image 3, keep it cropped. Do not pull the camera backward, widen the shot, or reveal the full body.\n- Do not recenter the subject, straighten the camera, or replace the composition with a more conventional cinematic shot.\n\nIMAGE 1 — ENVIRONMENT APPEARANCE\nUse Image 1 for the environment’s identity, materials, textures, colors, lighting, and atmosphere. Reinterpret those details from Image 3’s viewpoint. Do not inherit Image 1’s camera position or framing.\n\nIMAGE 2 — CHARACTER APPEARANCE\nReplace the mannequin with the single person depicted in Image 2. Preserve their facial identity, hairstyle, clothing, proportions, and accessories. Keep the mannequin’s pose, placement, facing direction, and interactions from Image 3. Do not turn the face toward the camera simply to show the identity more clearly.\n\nIMAGE 3 — LOCKED SPATIAL STRUCTURE\nReplace its clay surfaces and simplified geometry with realistic appearances from Images 1 and 2 while keeping its projected spatial structure intact.\n\nBefore finalizing, compare the frame against Image 3: subject size, head and hand positions, foreground object size, vanishing directions, and frame-edge cropping should remain closely aligned.\n\nOutput one photorealistic image. No mannequin surfaces, viewport graphics, labels, collage, or character-sheet layout.\nCamera metadata: 35 mm full-frame equivalent, azimuth 0 degrees, elevation 0 degrees. The guide image projection has priority over descriptive wording. ",
+      "model": "Gemini Nano Banana 2.1",
+      "model.aspect_ratio": "16:9",
+      "model.resolution": "1K",
+      "model.thinking_level": "HIGH",
+      "seed": 42,
+      "response_modalities": "IMAGE",
+      "temperature": 1,
+      "top_p": 0.95,
+      "model.images.image_1": [
+        "source",
+        0
+      ],
+      "model.images.image_2": [
+        "ref0",
+        0
+      ],
+      "model.images.image_3": [
+        "guide",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Generate camera-matched preview"
+    }
+  },
+  "save": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "generate",
+        0
+      ],
+      "filename_prefix": "shotfix/shot"
+    },
+    "_meta": {
+      "title": "Save preview"
+    }
+  }
+}

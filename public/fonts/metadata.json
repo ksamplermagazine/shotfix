@@ -1,0 +1,23 @@
+{
+  "family": "Inter",
+  "format": "woff2",
+  "bytes": 351132,
+  "axes": [
+    {
+      "tag": "opsz",
+      "min": 14,
+      "default": 14,
+      "max": 32
+    },
+    {
+      "tag": "wght",
+      "min": 100,
+      "default": 400,
+      "max": 900
+    }
+  ],
+  "license": "SIL OFL 1.1",
+  "source": "Bundled with Blender 5.2.3 at 5.2/datafiles/fonts/Inter.woff2",
+  "upstream": "https://github.com/rsms/inter",
+  "sha256": "fb865a5087637ba194b14aef6f0558214f3c4b3ec939e3c0812c66de41036a47"
+}

@@ -1,0 +1,8 @@
+node_modules/
+.runtime/
+.env
+*.log
+workflows/*.reference.txt
+
+# User reference files and derived local-only scene
+public/assets/private/
